@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>画像ジェネレーター</title>
+
+<style>
+body{
+    font-family:sans-serif;
+    margin:0;
+    padding:20px;
+    background:#f5f5f5;
+}
+
+.container{
+    max-width:500px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+}
+
+label{
+    display:block;
+    margin-top:18px;
+    font-weight:bold;
+}
+
+select,
+textarea,
+input[type="color"]{
+    width:100%;
+    padding:10px;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+.checkbox-group{
+    margin-top:10px;
+}
+
+.checkbox-group label{
+    font-weight:normal;
+    display:block;
+    margin:5px 0;
+}
+
+button{
+    margin-top:25px;
+    width:100%;
+    padding:15px;
+    font-size:18px;
+    cursor:pointer;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>画像ジェネレーター</h1>
+
+<label>
+カテゴリ
+</label>
+
+<select id="category">
+    <option>サンプル</option>
+    <option>カテゴリA</option>
+    <option>カテゴリB</option>
+    <option>カテゴリC</option>
+</select>
+
+<label>
+オプション
+</label>
+
+<div class="checkbox-group">
+<label><input type="checkbox" id="opt1"> オプションA</label>
+<label><input type="checkbox" id="opt2"> オプションB</label>
+</div>
+
+<label>
+自由入力
+</label>
+
+<textarea
+id="message"
+rows="6"
+placeholder="ここに入力してください"></textarea>
+
+<label>
+背景色
+</label>
+
+<input
+type="color"
+id="bgColor"
+value="#ffffff">
+
+<label>
+文字色
+</label>
+
+<input
+type="color"
+id="textColor"
+value="#000000">
+
+<button onclick="generateImage()">
+画像を生成
+</button>
+
+</div>
+
+<script>
+const WIDTH = 1080;
+const HEIGHT = 1980;
+
+function generateImage(){
+
+    const canvas = document.createElement("canvas");
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+
+    const ctx = canvas.getContext("2d");
+
+    const bg =
+        document.getElementById("bgColor").value;
+
+    const textColor =
+        document.getElementById("textColor").value;
+
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,WIDTH,HEIGHT);
+
+    ctx.fillStyle = textColor;
+    ctx.textAlign = "center";
+
+    // タイトル
+    ctx.font = "bold 72px sans-serif";
+
+    const category =
+        document.getElementById("category").value;
+
+    ctx.fillText(
+        category,
+        WIDTH/2,
+        180
+    );
+
+    // チェック項目
+    ctx.font = "50px sans-serif";
+
+    let y = 320;
+
+    if(document.getElementById("opt1").checked){
+        ctx.fillText("✓ オプションA", WIDTH/2, y);
+        y += 80;
+    }
+
+    if(document.getElementById("opt2").checked){
+        ctx.fillText("✓ オプションB", WIDTH/2, y);
+        y += 80;
+    }
+
+    // 自由入力
+    ctx.font = "58px sans-serif";
+
+    const text =
+        document.getElementById("message").value;
+
+    drawWrappedText(
+        ctx,
+        text,
+        WIDTH/2,
+        y+80,
+        900,
+        80
+    );
+
+    // JPEG化
+    const data =
+        canvas.toDataURL("image/jpeg",0.95);
+
+    // 画像だけ表示する新しいタブ
+    const w = window.open("");
+
+    w.document.write(`
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+html,body{
+margin:0;
+padding:0;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+img{
+width:100%;
+height:auto;
+display:block;
+}
+</style>
+</head>
+<body>
+<img src="${data}">
+</body>
+</html>
+`);
+}
+
+function drawWrappedText(
+    ctx,
+    text,
+    x,
+    y,
+    maxWidth,
+    lineHeight
+){
+
+    const chars = text.split("");
+    let line = "";
+
+    for(let i=0;i<chars.length;i++){
+
+        const testLine = line + chars[i];
+
+        if(
+            ctx.measureText(testLine).width
+            > maxWidth
+        ){
+
+            ctx.fillText(
+                line,
+                x,
+                y
+            );
+
+            line = chars[i];
+            y += lineHeight;
+
+        }else{
+
+            line = testLine;
+
+        }
+
+    }
+
+    ctx.fillText(
+        line,
+        x,
+        y
+    );
+
+}
+</script>
+
+</body>
+</html>
