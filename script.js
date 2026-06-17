@@ -216,7 +216,7 @@ function generateOutputText(){
 
     });
 
-    outputText.value = text;
+    outputText.value = text.trim() + "\n\n#コスキュー" + "\n\n#合わせ募集";
 
 }
 
