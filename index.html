@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>COSQOO！ | 合わせ募集画像生成サイト</title>
+
+    <!-- フォント -->
+    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ロゴ -->
+    <h1>
+        <img src="logo.png" alt="COSQOO!" class="logo">
+    </h1>
+
+    <!-- 開催日 -->
+    <label for="eventDate">📅 開催日</label>
+
+    <input type="date" id="eventDate">
+
+    <div class="checkbox-group">
+        <label>
+            <input type="checkbox" id="dateUnknown">
+            日時未定
+        </label>
+    </div>
+
+    <!-- 場所 -->
+    <label for="location">📍 場所</label>
+
+    <input
+        type="text"
+        id="location"
+        placeholder="〇〇県〇〇市スタジオ"
+    >
+
+    <!-- 参加費 -->
+    <label for="cost">💰 参加費</label>
+
+    <input
+        type="text"
+        id="cost"
+        placeholder="例：3,500円"
+    >
+
+    <div class="checkbox-group">
+
+        <label>
+            <input type="checkbox" id="costCosplayer">
+            レイヤーのみ負担
+        </label>
+
+        <label>
+            <input type="checkbox" id="costSelf">
+            全員自己負担
+        </label>
+
+    </div>
+
+    <!-- 募集範囲 -->
+    <label for="range">🌸 募集範囲</label>
+
+    <select id="range">
+
+        <option value="">選択してください</option>
+
+        <option>確定メンバーのFF内</option>
+
+        <option>確定メンバーのFFのFF内</option>
+
+        <option>検索からでもOK！</option>
+
+    </select>
+
+    <!-- 条件 -->
+    <label for="condition">✨ 条件</label>
+
+    <select id="condition">
+
+        <option value="">選択してください</option>
+
+        <option>女性のみ</option>
+
+        <option>男性のみ</option>
+
+        <option>身体性別不問</option>
+
+    </select>
+
+    <!-- 応募方法 -->
+    <label>📩 応募方法</label>
+
+    <div class="checkbox-group">
+
+        <label>
+            <input type="checkbox" id="reply">
+            このポストにリプライ
+        </label>
+
+        <label>
+            <input type="checkbox" id="like">
+            このポストにいいね
+        </label>
+
+        <label>
+            <input type="checkbox" id="dm">
+            主催者に直接DM
+        </label>
+
+    </div>
+
+    <!-- 作品名 -->
+    <label for="title">🎭 作品名</label>
+
+    <input
+        type="text"
+        id="title"
+        placeholder="作品名"
+    >
+
+    <!-- 募集メンバー -->
+    <label for="wanted">🙋 募集メンバー</label>
+
+    <textarea
+        id="wanted"
+        placeholder="例：
+主人公
+ヒロイン
+カメラマン"
+    ></textarea>
+
+    <!-- 確定メンバー -->
+    <label>✅ 確定メンバー</label>
+
+    <div id="memberList">
+
+        <div class="member-row">
+
+            <input
+                type="text"
+                class="member-character"
+                placeholder="キャラクター名"
+            >
+
+            <input
+                type="text"
+                class="member-name"
+                placeholder="アカウント名"
+            >
+
+            <input
+                type="text"
+                class="member-id"
+                placeholder="X ID"
+            >
+
+        </div>
+
+    </div>
+
+    <button
+        type="button"
+        class="add-member-btn"
+        id="addMemberButton"
+    >
+        ＋ 確定メンバーを追加
+    </button>
+
+    <!-- 色設定 -->
+    <div class="color-row">
+
+        <div class="color-item">
+
+            <label for="bgColor">
+                🎨 背景色
+            </label>
+
+            <div class="color-picker">
+
+                <input
+                    type="color"
+                    id="bgColor"
+                    value="#ffffff"
+                >
+
+            </div>
+
+        </div>
+
+        <div class="color-item">
+
+            <label for="textColor">
+                🌈 文字色
+            </label>
+
+            <div class="color-picker">
+
+                <input
+                    type="color"
+                    id="textColor"
+                    value="#333333"
+                >
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 画像生成 -->
+    <button
+        type="button"
+        id="generateImageButton"
+    >
+        🩵 画像を生成する！
+    </button>
+
+    <!-- テキスト生成 -->
+    <button
+        type="button"
+        id="generateTextButton"
+    >
+        📋 テキストを生成する！
+    </button>
+
+    <!-- コピー用テキスト -->
+    <div class="output-box">
+
+        <label for="outputText">
+            📝 コピー用テキスト
+        </label>
+
+        <textarea
+            id="outputText"
+            readonly
+            placeholder="ここに生成されます"
+        ></textarea>
+
+    </div>
+
+</div>
+
+<!-- JavaScript -->
+<script src="script.js"></script>
+
+</body>
+</html>
