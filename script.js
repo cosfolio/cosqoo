@@ -1,228 +1,246 @@
-// ==========================
-// 初期設定
-// ==========================
+// =====================================
+// COSQOO! script.js 前半
+// =====================================
 
 const CANVAS_WIDTH = 1080;
 const CANVAS_HEIGHT = 1980;
 
-// ==========================
-// DOM取得
-// ==========================
+// --------------------
+// DOM
+// --------------------
 
-const memberList =
-    document.getElementById("memberList");
+const memberList = document.getElementById("memberList");
+const addMemberButton = document.getElementById("addMemberButton");
+const generateTextButton = document.getElementById("generateTextButton");
+const generateImageButton = document.getElementById("generateImageButton");
+const outputText = document.getElementById("outputText");
 
-const addMemberButton =
-    document.getElementById("addMemberButton");
+// --------------------
+// メンバー追加
+// --------------------
 
-const generateTextButton =
-    document.getElementById("generateTextButton");
+addMemberButton.addEventListener("click", () => {
 
-const generateImageButton =
-    document.getElementById("generateImageButton");
+    const row = document.createElement("div");
 
-const outputText =
-    document.getElementById("outputText");
+    row.className = "member-row";
 
-// ==========================
-// 確定メンバー追加
-// ==========================
+    row.innerHTML = `
 
-addMemberButton.addEventListener(
-    "click",
-    () => {
-
-        const row =
-            document.createElement("div");
-
-        row.className = "member-row";
-
-        row.innerHTML = `
-
+        <div class="member-field">
+            <span>キャラ</span>
             <input
                 type="text"
                 class="member-character"
-                placeholder="キャラクター名"
-            >
+                placeholder="キャラ">
+        </div>
 
+        <div class="member-field">
+            <span>名前</span>
             <input
                 type="text"
                 class="member-name"
-                placeholder="アカウント名"
-            >
+                placeholder="名前">
+        </div>
 
+        <div class="member-field">
+            <span>X ID</span>
             <input
                 type="text"
                 class="member-id"
-                placeholder="X ID"
-            >
+                placeholder="@xxxx">
+        </div>
 
-        `;
+    `;
 
-        memberList.appendChild(row);
+    memberList.appendChild(row);
 
-    }
-);
+});
 
-// ==========================
+// --------------------
 // テキスト生成
-// ==========================
+// --------------------
 
 generateTextButton.addEventListener(
     "click",
     generateOutputText
 );
 
-function generateOutputText(){
+function generateOutputText() {
 
-    let text = "";
+    const lines = [];
 
     // 日付
 
-    if(
-        document.getElementById("dateUnknown").checked
-    ){
+    if (document.getElementById("dateUnknown").checked) {
 
-        text += "📅 日時未定\n";
+        lines.push("📅 日時未定");
 
-    }else{
+    } else {
 
-        text +=
-            "📅 " +
-            document.getElementById("eventDate").value +
-            "\n";
+        const value =
+            document.getElementById("eventDate").value;
+
+        if (value) {
+
+            lines.push("📅 " + value);
+
+        }
 
     }
 
     // 場所
 
-    text +=
-        "📍 " +
-        document.getElementById("location").value +
-        "\n";
+    const location =
+        document.getElementById("location").value.trim();
 
-    // 参加費
+    if (location) {
+
+        lines.push("📍 " + location);
+
+    }
+
+    // 費用
 
     let cost =
-        document.getElementById("cost").value;
+        document.getElementById("cost").value.trim();
 
-    if(
+    if (
         document.getElementById("costCosplayer").checked
-    ){
+    ) {
 
-        cost +=
-            "（レイヤーのみ負担）";
+        cost += "（レイヤーのみ負担）";
 
     }
 
-    if(
+    if (
         document.getElementById("costSelf").checked
-    ){
+    ) {
 
-        cost +=
-            "（全員自己負担）";
+        cost += "（全員自己負担）";
 
     }
 
-    text +=
-        "💰 " +
-        cost +
-        "\n";
+    if (cost) {
+
+        lines.push("💰 " + cost);
+
+    }
 
     // 募集範囲
 
-    text +=
-        "🌸 募集範囲：" +
-        document.getElementById("range").value +
-        "\n";
+    if (document.getElementById("range").value) {
+
+        lines.push(
+            "🌸 募集範囲：" +
+            document.getElementById("range").value
+        );
+
+    }
 
     // 条件
 
-    text +=
-        "✨ 条件：" +
-        document.getElementById("condition").value +
-        "\n";
+    if (document.getElementById("condition").value) {
+
+        lines.push(
+            "✨ 条件：" +
+            document.getElementById("condition").value
+        );
+
+    }
 
     // 応募方法
 
     const methods = [];
 
-    if(document.getElementById("reply").checked){
+    if (document.getElementById("reply").checked) {
 
         methods.push("リプライ");
 
     }
 
-    if(document.getElementById("like").checked){
+    if (document.getElementById("like").checked) {
 
         methods.push("いいね");
 
     }
 
-    if(document.getElementById("dm").checked){
+    if (document.getElementById("dm").checked) {
 
         methods.push("DM");
 
     }
 
-    text +=
-        "📩 応募方法：" +
-        methods.join("・") +
-        "\n";
+    if (methods.length > 0) {
+
+        lines.push(
+            "📩 応募方法：" +
+            methods.join("・")
+        );
+
+    }
 
     // 作品
 
-    text +=
-        "\n🎭 作品\n";
+    lines.push("");
 
-    text +=
-        document.getElementById("title").value +
-        "\n";
+    lines.push("🎭 作品");
+
+    lines.push(
+        document.getElementById("title").value
+    );
 
     // 募集メンバー
 
-    text +=
-        "\n🙋 募集メンバー\n";
+    lines.push("");
 
-    text +=
-        document.getElementById("wanted").value +
-        "\n";
+    lines.push("🙋 募集メンバー");
+
+    lines.push(
+        document.getElementById("wanted").value
+    );
 
     // 確定メンバー
 
-    text +=
-        "\n✅ 確定メンバー\n";
+    lines.push("");
 
-    const rows =
-        document.querySelectorAll(".member-row");
+    lines.push("✅ 確定メンバー");
 
-    rows.forEach(row=>{
+    document
+        .querySelectorAll(".member-row")
+        .forEach(row => {
 
-        const c =
-            row.querySelector(".member-character").value;
+            const c =
+                row.querySelector(".member-character").value;
 
-        const n =
-            row.querySelector(".member-name").value;
+            const n =
+                row.querySelector(".member-name").value;
 
-        const x =
-            row.querySelector(".member-id").value;
+            const x =
+                row.querySelector(".member-id").value;
 
-        if(c || n || x){
+            if (c || n || x) {
 
-            text +=
-                `・${c} / ${n} / @${x}\n`;
+                lines.push(
+                    `・${c} / ${n} / @${x}`
+                );
 
-        }
+            }
 
-    });
+        });
 
-    outputText.value = text.trim() + "\n\n#コスキュー" + "\n#合わせ募集";
+    lines.push("");
+    lines.push("#コスキュー");
+    lines.push("#合わせ募集");
+
+    outputText.value =
+        lines.join("\n");
 
 }
 
-// ==========================
-// テキスト折り返し
-// ==========================
+// --------------------
+// Canvas文字折返し
+// --------------------
 
 function drawWrappedText(
     ctx,
@@ -231,24 +249,24 @@ function drawWrappedText(
     y,
     maxWidth,
     lineHeight
-){
+) {
 
-    const lines =
-        text.split("\n");
+    const split =
+        String(text).split("\n");
 
-    for(const originalLine of lines){
+    split.forEach(oneLine => {
 
         let line = "";
 
-        for(const ch of originalLine){
+        for (const ch of oneLine) {
 
             const test =
                 line + ch;
 
-            if(
+            if (
                 ctx.measureText(test).width >
                 maxWidth
-            ){
+            ) {
 
                 ctx.fillText(
                     line,
@@ -260,7 +278,7 @@ function drawWrappedText(
 
                 line = ch;
 
-            }else{
+            } else {
 
                 line = test;
 
@@ -276,40 +294,52 @@ function drawWrappedText(
 
         y += lineHeight;
 
-    }
+    });
 
     return y;
 
 }
 
-// ==========================
-// 画像生成ボタン
-// （実処理は後半で実装）
-// ==========================
+// --------------------
+// ボタン
+// --------------------
 
 generateImageButton.addEventListener(
     "click",
     generateImage
 );
 
-// ==========================
-// 画像生成
-// ==========================
+// generateImage() は後半で定義
+
+
+// =====================================
+// generateImage()
+// =====================================
 
 async function generateImage() {
 
-    // Webフォントの読み込み完了を待つ
+    // Safari対策：
+    // ユーザー操作直後に新しいタブを開く
+    const imageWindow = window.open("", "_blank");
+
+    if (!imageWindow) {
+        alert("新しいタブを開けませんでした。");
+        return;
+    }
+
+    // フォント読み込み待ち
     if (document.fonts && document.fonts.ready) {
         await document.fonts.ready;
     }
 
+    // Canvas作成
     const canvas = document.createElement("canvas");
     canvas.width = CANVAS_WIDTH;
     canvas.height = CANVAS_HEIGHT;
 
     const ctx = canvas.getContext("2d");
 
-    // 背景色
+    // 背景
     ctx.fillStyle =
         document.getElementById("bgColor").value;
 
@@ -326,10 +356,7 @@ async function generateImage() {
 
     ctx.textAlign = "left";
 
-    // --------------------------
-    // ロゴ描画
-    // --------------------------
-
+    // ロゴ読込
     const logo = new Image();
 
     logo.src = "logo.png";
@@ -337,14 +364,16 @@ async function generateImage() {
     await new Promise(resolve => {
 
         logo.onload = resolve;
-
         logo.onerror = resolve;
 
     });
 
-    let y = 60;
+    let y = 50;
 
-    if (logo.complete && logo.naturalWidth > 0) {
+    if (
+        logo.complete &&
+        logo.naturalWidth > 0
+    ) {
 
         const width = 420;
 
@@ -354,46 +383,69 @@ async function generateImage() {
             logo.naturalWidth;
 
         ctx.drawImage(
+
             logo,
+
             (CANVAS_WIDTH - width) / 2,
+
             y,
+
             width,
+
             height
+
         );
 
-        y += height + 50;
+        y += height + 60;
 
     }
 
-    // フォント設定
-    ctx.font =
-        '48px "Zen Maru Gothic", sans-serif';
+    // 本文フォント
 
-    // --------------------------
+    ctx.font =
+        '46px "Zen Maru Gothic", sans-serif';
+
+    // -----------------------
     // 開催情報
-    // --------------------------
+    // -----------------------
 
     const dateText =
         document.getElementById("dateUnknown").checked
-            ? "日時未定"
-            : document.getElementById("eventDate").value;
+        ? "日時未定"
+        : document.getElementById("eventDate").value;
 
-    ctx.fillText(
+    y = drawWrappedText(
+
+        ctx,
+
         "📅 " + dateText,
+
         70,
-        y
+
+        y,
+
+        940,
+
+        58
+
     );
 
-    y += 70;
+    y = drawWrappedText(
 
-    ctx.fillText(
+        ctx,
+
         "📍 " +
         document.getElementById("location").value,
-        70,
-        y
-    );
 
-    y += 70;
+        70,
+
+        y,
+
+        940,
+
+        58
+
+    );
 
     let cost =
         document.getElementById("cost").value;
@@ -402,8 +454,7 @@ async function generateImage() {
         document.getElementById("costCosplayer").checked
     ) {
 
-        cost +=
-            "（レイヤーのみ負担）";
+        cost += "（レイヤーのみ負担）";
 
     }
 
@@ -411,28 +462,37 @@ async function generateImage() {
         document.getElementById("costSelf").checked
     ) {
 
-        cost +=
-            "（全員自己負担）";
+        cost += "（全員自己負担）";
 
     }
 
-    ctx.fillText(
+    y = drawWrappedText(
+
+        ctx,
+
         "💰 " + cost,
+
         70,
-        y
+
+        y,
+
+        940,
+
+        58
+
     );
 
-    y += 90;
+    y += 15;
 
-    // --------------------------
+    // -----------------------
     // 募集条件
-    // --------------------------
+    // -----------------------
 
     ctx.font =
-        'bold 52px "Zen Maru Gothic", sans-serif';
+        'bold 50px "Zen Maru Gothic", sans-serif';
 
     ctx.fillText(
-        "🌸 募集範囲・条件",
+        "🌸 募集条件",
         70,
         y
     );
@@ -446,8 +506,8 @@ async function generateImage() {
 
         ctx,
 
-        "募集範囲："
-        + document.getElementById("range").value,
+        "募集範囲：" +
+        document.getElementById("range").value,
 
         70,
 
@@ -463,8 +523,8 @@ async function generateImage() {
 
         ctx,
 
-        "条件："
-        + document.getElementById("condition").value,
+        "条件：" +
+        document.getElementById("condition").value,
 
         70,
 
@@ -476,37 +536,19 @@ async function generateImage() {
 
     );
 
-    // --------------------------
-    // 応募方法
-    // --------------------------
-
     const methods = [];
 
-    if (
-        document.getElementById("reply").checked
-    ) {
-
+    if (document.getElementById("reply").checked) {
         methods.push("リプライ");
-
     }
 
-    if (
-        document.getElementById("like").checked
-    ) {
-
+    if (document.getElementById("like").checked) {
         methods.push("いいね");
-
     }
 
-    if (
-        document.getElementById("dm").checked
-    ) {
-
+    if (document.getElementById("dm").checked) {
         methods.push("DM");
-
     }
-
-    y += 10;
 
     y = drawWrappedText(
 
@@ -525,14 +567,14 @@ async function generateImage() {
 
     );
 
-    // --------------------------
-    // 作品名
-    // --------------------------
-
     y += 20;
 
+    // -----------------------
+    // 作品
+    // -----------------------
+
     ctx.font =
-        'bold 52px "Zen Maru Gothic", sans-serif';
+        'bold 50px "Zen Maru Gothic", sans-serif';
 
     ctx.fillText(
         "🎭 作品",
@@ -561,14 +603,14 @@ async function generateImage() {
 
     );
 
-    // --------------------------
-    // 募集メンバー
-    // --------------------------
-
     y += 20;
 
+    // -----------------------
+    // 募集メンバー
+    // -----------------------
+
     ctx.font =
-        'bold 52px "Zen Maru Gothic", sans-serif';
+        'bold 50px "Zen Maru Gothic", sans-serif';
 
     ctx.fillText(
         "🙋 募集メンバー",
@@ -597,14 +639,14 @@ async function generateImage() {
 
     );
 
-    // --------------------------
-    // 確定メンバー
-    // --------------------------
+    y += 20;
 
-    y += 30;
+    // -----------------------
+    // 確定メンバー
+    // -----------------------
 
     ctx.font =
-        'bold 52px "Zen Maru Gothic", sans-serif';
+        'bold 50px "Zen Maru Gothic", sans-serif';
 
     ctx.fillText(
         "✅ 確定メンバー",
@@ -612,7 +654,7 @@ async function generateImage() {
         y
     );
 
-    y += 70;
+    y += 65;
 
     ctx.font =
         '42px "Zen Maru Gothic", sans-serif';
@@ -621,24 +663,20 @@ async function generateImage() {
         .querySelectorAll(".member-row")
         .forEach(row => {
 
-            const character =
+            const c =
                 row.querySelector(".member-character").value;
 
-            const name =
+            const n =
                 row.querySelector(".member-name").value;
 
-            const id =
+            const x =
                 row.querySelector(".member-id").value;
 
-            if (
-                character ||
-                name ||
-                id
-            ) {
+            if (c || n || x) {
 
                 ctx.fillText(
 
-                    `${character}　${name}　@${id}`,
+                    `${c}　${n}　@${x}`,
 
                     70,
 
@@ -646,57 +684,50 @@ async function generateImage() {
 
                 );
 
-                y += 56;
+                y += 52;
 
             }
 
         });
 
-    // --------------------------
-    // JPEG出力
-    // --------------------------
+    // JPEG生成
 
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
+    const dataUrl =
+        canvas.toDataURL(
+            "image/jpeg",
+            0.95
+        );
 
-// JPEGデータを生成
-const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
+    // 新しいタブに画像だけ表示
 
-// 新しいタブを開く
-const newWindow = window.open("", "_blank");
+    imageWindow.document.open();
 
-// ポップアップが許可されている場合のみ書き込み
-if (newWindow) {
-    newWindow.document.write(`
+    imageWindow.document.write(`
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>生成画像</title>
 <style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        background: #000;
-    }
-
-    img {
-        display: block;
-        width: 100%;
-        height: auto;
-        margin: 0 auto;
-    }
+html,body{
+    margin:0;
+    padding:0;
+    background:#000;
+}
+img{
+    display:block;
+    width:100%;
+    height:auto;
+}
 </style>
 </head>
 <body>
-    <img src="${dataUrl}" alt="生成画像">
+<img src="${dataUrl}" alt="生成画像">
 </body>
 </html>
-    `);
+`);
 
-    newWindow.document.close();
-} else {
-    alert("新しいタブを開けませんでした。ブラウザのポップアップ設定をご確認ください。");
-}
+    imageWindow.document.close();
 
 }
