@@ -662,25 +662,23 @@ async function generateImage() {
             0.95
         );
 
-    const popup =
-        window.open("");
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
 
-    popup.document.write(`
+// 現在のページで画像だけ表示
+document.body.innerHTML = `
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 html,body{
-margin:0;
-padding:0;
-background:#000;
+    margin:0;
+    background:#000;
 }
 img{
-display:block;
-width:100%;
-height:auto;
+    display:block;
+    width:100%;
+    height:auto;
 }
 </style>
 </head>
@@ -688,6 +686,6 @@ height:auto;
 <img src="${dataUrl}">
 </body>
 </html>
-`);
+`;
 
 }
