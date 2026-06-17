@@ -658,28 +658,45 @@ async function generateImage() {
 
     const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
 
-// 現在のページで画像だけ表示
-document.body.innerHTML = `
+// JPEGデータを生成
+const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
+
+// 新しいタブを開く
+const newWindow = window.open("", "_blank");
+
+// ポップアップが許可されている場合のみ書き込み
+if (newWindow) {
+    newWindow.document.write(`
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生成画像</title>
 <style>
-html,body{
-    margin:0;
-    background:#000;
-}
-img{
-    display:block;
-    width:100%;
-    height:auto;
-}
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+    }
 </style>
 </head>
 <body>
-<img src="${dataUrl}">
+    <img src="${dataUrl}" alt="生成画像">
 </body>
 </html>
-`;
+    `);
+
+    newWindow.document.close();
+} else {
+    alert("新しいタブを開けませんでした。ブラウザのポップアップ設定をご確認ください。");
+}
 
 }
