@@ -48,7 +48,7 @@ addMemberButton.addEventListener("click", () => {
             <input
                 type="text"
                 class="member-id"
-                placeholder="@xxxx">
+                placeholder="xxxx">
         </div>
 
     `;
