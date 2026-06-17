@@ -656,12 +656,6 @@ async function generateImage() {
     // JPEG出力
     // --------------------------
 
-    const dataUrl =
-        canvas.toDataURL(
-            "image/jpeg",
-            0.95
-        );
-
     const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
 
 // 現在のページで画像だけ表示
